@@ -1,4 +1,4 @@
-/* Written in a summer afternoon in notepad.*/
+/* Written in a summer afternoon in notepad. */
 
 /* compile & run: gcc smolvm.c -o smolvm -Wall && smolvm */
 /* MVP Goal: 3 opcodes -> 4 registers (byte size) */
@@ -6,6 +6,7 @@
 #include <stdio.h>
 
 #define REGISTER_COUNT 4
+#define DEBUG 0 // TODO: accept a runtime flag to toggle this
 
 unsigned char registers[REGISTER_COUNT];
 
@@ -44,7 +45,7 @@ void executeInstruction()
         case 1: // add B to A
             registers[operand1] += operand2;
             break;
-        case 2: // print based off ASCII table
+        case 2: // print according to ASCII table
             printf("%c", registers[operand1]);
             break;
     }
@@ -56,18 +57,18 @@ void printState()
     int i;
     for (i = 0; i < REGISTER_COUNT; i++)
     {
-        printf("%04o ", registers[i]);
+        printf("%03o ", registers[i]);
     }
-    printf("\n");
 }
 
 void run()
 {
     while(running)
     {
-        //printState(); // for debugging, TODO: REPL mode vs script mode
+        if (DEBUG) { printState(); } // TODO: REPL mode vs script mode
         decodeInstruction(nextInstruction());
-	executeInstruction();
+        executeInstruction();
+		if (DEBUG) { printf("\n"); }
     }
 }
 
