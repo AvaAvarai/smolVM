@@ -6,7 +6,7 @@
 #include <stdio.h>
 
 #define REGISTER_COUNT 4
-#define DEBUG 0 // TODO: accept a runtime flag to toggle this
+#define DEBUG 1 // TODO: accept a runtime flag to toggle this
 
 unsigned char registers[REGISTER_COUNT];
 
@@ -53,7 +53,7 @@ void executeInstruction()
 
 void printState()
 {
-    printf("Registers @%d = ", frame++);
+    printf("Registers @%02d = ", frame++);
     int i;
     for (i = 0; i < REGISTER_COUNT; i++)
     {
