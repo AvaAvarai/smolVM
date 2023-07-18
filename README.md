@@ -13,5 +13,7 @@ Goals:
 - Add flag parsing to toggle debug mode.
 - More opcodes starting with: `mov`, `sub`, `and`, `or`.
 
-![MVP-PROGRAM1](mvp-program1)
-![MVP-PROGRAM1-DEBUG](mvp-program1-debug)
+Program 1:  
+![MVP-PROGRAM1](mvp-program1.png)  
+Program 1 Debug:   
+![MVP-PROGRAM1-DEBUG](mvp-program1-debug.png)  
