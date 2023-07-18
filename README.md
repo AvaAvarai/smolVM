@@ -7,5 +7,7 @@ Current status:
 - Reads in-memory program
 - Debug mode to print register per cycle
 
-![MVP-PROGRAM1](mvp-program1)
-![MVP-PROGRAM1-DEBUG](mvp-program1-debug)
+Program 1:  
+![MVP-PROGRAM1](mvp-program1.png)  
+Program 1 Debug:   
+![MVP-PROGRAM1-DEBUG](mvp-program1-debug.png)  
