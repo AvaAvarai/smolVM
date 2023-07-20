@@ -84,8 +84,6 @@ void run()
 		Call call = decodeInstruction(instruction);
         running = executeInstruction(registers, &call);
 		
-		
-		
 		if (DEBUG) { printf("\n"); }
 		frame++;
 	}
