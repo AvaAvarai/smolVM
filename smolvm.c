@@ -1,20 +1,25 @@
-/* compile & run:
-	- gcc smolvm.c -o smolvm -Wall && smolvm
+/* 
+- compile: gcc smolvm.c -o smolvm -Wall
+- run: smolvm
+- debug mode: smolvm debug
 
 - MVP Goal: 3 opcodes -> 4 registers (byte size) [DONE]
 - Stage 2: call structure and 8 bit width operands [DONE]
-- Stage 3: debug as args flag, read file for program
+- Stage 3: debug args flag [DONE], read file for program
 - Stage 4: more opcodes up to 16 total
 
+call width of 20 bits.
 Program call structure   opcode, operand1, operand2
                       0x F       FF        FF 
 		     Example  0x 1       00        42 
 Calls opcode 1 (add) with operand1 of 00 and operand2 of 42 adding 42 to register 0. */
 
 #include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
 
 #define REGISTER_COUNT 4
-#define DEBUG 1 // TODO: accept a runtime flag to toggle this
+
 
 typedef struct {
     unsigned opcode;
@@ -22,13 +27,13 @@ typedef struct {
     unsigned operand2;
 } Call;
 
-Call decodeInstruction(unsigned instruction)
+Call decodeInstruction(unsigned debug, unsigned instruction)
 {
     Call call;
     call.opcode = (instruction & 0xF0000) >> 16;
     call.operand1 = (instruction & 0x0FF00) >> 8;
     call.operand2 = instruction & 0x000FF;
-	if (DEBUG) { printf("| instr %05x code %0x op1 %02x op2 %02x | ", instruction, call.opcode, call.operand1, call.operand2); }
+	if (debug) { printf("| instr %05x code %0x op1 %02x op2 %02x | ", instruction, call.opcode, call.operand1, call.operand2); }
     return call;
 }
 
@@ -60,7 +65,7 @@ void printState(unsigned char *registers, unsigned frame)
     }
 }
 
-void run()
+void run(unsigned debug)
 {
 	unsigned program_counter = 0;
 	unsigned char registers[REGISTER_COUNT];
@@ -78,19 +83,37 @@ void run()
 	
     while(running)
     {
-        if (DEBUG) { printState(registers, frame); } // TODO: REPL mode vs script mode
+        if (debug) { printState(registers, frame); } // TODO: REPL mode vs script mode
         
 		unsigned instruction = program[program_counter++];
-		Call call = decodeInstruction(instruction);
+		Call call = decodeInstruction(debug, instruction);
         running = executeInstruction(registers, &call);
 		
-		if (DEBUG) { printf("\n"); }
+		if (debug) { printf("\n"); }
 		frame++;
 	}
 }
 
 int main(int argc, char* argv[])
 {
-    run();
+	unsigned debug = 0;
+	if( argc > 2 )
+	{
+        printf("Too many arguments supplied only 'debug' or no flag are supported.\n");
+		return -1;
+    }
+	else if( argc == 2 ) {
+        if (strcmp(argv[1], "debug") == 0)
+		{
+			debug = 1;
+		}
+		else
+		{
+		    printf("Unknown arguments supplied only 'debug' or no flag are supported.\n");
+			return -1;
+		}
+	}
+    
+    run(debug);
     return 0;
 }
